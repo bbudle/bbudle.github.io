@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>김재웅의 게임 도감</title>
+  <title>김재웅의 게임 업적</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -54,10 +54,11 @@
       border-bottom: 3px solid var(--color-primary);
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       z-index: 1000;
       box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
+      padding: 0 2rem;
     }
 
     .game-header::before {
@@ -77,18 +78,215 @@
       letter-spacing: 1px;
       text-transform: uppercase;
       text-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+      flex: 1;
+      text-align: left;
     }
 
     .game-header-icon {
-      position: absolute;
-      left: 20px;
+      position: relative;
       font-size: 1.5rem;
       animation: float 3s ease-in-out infinite;
+      flex-shrink: 0;
     }
 
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-5px); }
+    }
+
+    /* 헤더 네비게이션 버튼 스타일 */
+    .header-nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .header-btn {
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--color-primary);
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition);
+      color: var(--color-text);
+    }
+
+    .header-btn:hover {
+      background: rgba(0, 212, 255, 0.2);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+      transform: scale(1.1);
+    }
+
+    /* 트로피 섹션 스타일 */
+    .trophy-section {
+      margin-bottom: 5rem;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .trophy-section h3 {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      margin-bottom: 2rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: var(--font-en);
+    }
+
+    /* 트로피 통계 박스 */
+    .trophy-stats-container {
+      display: flex;
+      align-items: stretch;
+      height: 180px;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(153, 50, 204, 0.05));
+      border: 2px solid var(--color-primary);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--glow-primary), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .trophy-stats-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    }
+
+    /* 좌측 섹션 - 시간 정보 */
+    .trophy-left-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 3rem;
+      width: 30%;
+      border-right: 2px solid rgba(0, 212, 255, 0.2);
+      gap: 0.5rem;
+    }
+
+    .trophy-left-label {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      font-family: var(--font-kr);
+    }
+
+    .trophy-left-number {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--color-primary);
+      font-family: var(--font-en);
+      letter-spacing: -2px;
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    }
+
+    /* 우측 섹션 - 트로피들 */
+    .trophy-right-section {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex: 1;
+      padding: 0 2rem;
+      gap: 1rem;
+    }
+
+    /* 개별 트로피 */
+    .trophy-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+      flex: 1;
+    }
+
+    .trophy-icon-wrapper {
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .trophy-icon-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.3));
+      transition: var(--transition);
+    }
+
+    .trophy-stat.prisim .trophy-icon-image {
+      filter: drop-shadow(0 0 20px rgba(217, 142, 255, 0.6));
+    }
+
+    .trophy-stat.gold .trophy-icon-image {
+      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+    }
+
+    .trophy-stat.silver .trophy-icon-image {
+      filter: drop-shadow(0 0 15px rgba(192, 192, 192, 0.4));
+    }
+
+    .trophy-stat:hover .trophy-icon-image {
+      transform: scale(1.1);
+    }
+
+    .trophy-stat.prisim:hover .trophy-icon-image {
+      filter: drop-shadow(0 0 30px rgba(217, 142, 255, 0.9));
+    }
+
+    .trophy-stat.gold:hover .trophy-icon-image {
+      filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.9));
+    }
+
+    .trophy-stat.silver:hover .trophy-icon-image {
+      filter: drop-shadow(0 0 25px rgba(192, 192, 192, 0.7));
+    }
+
+    /* 트로피 아래 숫자 */
+    .trophy-count-number {
+      font-size: 1.6rem;
+      font-weight: 900;
+      font-family: var(--font-en);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .trophy-stat.prisim .trophy-count-number {
+      color: #D98EFF;
+      text-shadow: 0 0 15px rgba(217, 142, 255, 0.5);
+    }
+
+    .trophy-stat.gold .trophy-count-number {
+      color: #FFD700;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+
+    .trophy-stat.silver .trophy-count-number {
+      color: #C0C0C0;
+      text-shadow: 0 0 10px rgba(192, 192, 192, 0.3);
+    }
+
+    .trophy-section-subtitle {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.5px;
+      font-family: var(--font-kr);
     }
 
     .background-effect {
@@ -189,13 +387,25 @@
     }
 
     .time-number {
-      font-size: 5rem;
+      font-size: 3rem;
       font-weight: 900;
       color: var(--color-primary);
       line-height: 1;
       font-family: var(--font-en);
       letter-spacing: -2px;
       text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .time-number::after {
+      content: '/ ???,???';
+      font-size: 2.5rem;
+      color: var(--color-text-secondary);
+      font-weight: 500;
+      letter-spacing: 1px;
     }
 
     .time-unit {
@@ -834,7 +1044,12 @@
   <!-- 게임 UI 상단 바 -->
   <div class="game-header">
     <div class="game-header-icon">🎮</div>
-    <h1 class="game-header-title">김재웅의 게임 도감</h1>
+    <h1 class="game-header-title">김재웅의 게임 업적</h1>
+    <div class="header-nav">
+      <button class="header-btn" title="음악"><span>🎵</span></button>
+      <button class="header-btn" title="설정"><span>⚙️</span></button>
+      <button class="header-btn" title="공유"><span>🔗</span></button>
+    </div>
   </div>
 
   <div class="background-effect"></div>
@@ -842,7 +1057,7 @@
   <div class="page active" id="mainPage">
     <div class="container">
       <div class="time-section">
-        <h2 class="section-title">도감 진행률</h2>
+        <h2 class="section-title">수집 진행률</h2>
         <div class="time-display">
           <div class="time-number" id="displayTime">0</div>
           <div class="time-unit">시간</div>
@@ -857,7 +1072,18 @@
 
       <div>
         <div class="section-header">
-          <h2 class="section-title">장르 도감</h2>
+          <h2 class="section-title">수집한 게임</h2>
+        </div>
+
+        <div class="trophy-section" id="trophySection" style="display: none;">
+          <h3>장르 별 수집 달성</h3>
+          <div class="trophy-stats-container">
+            <div class="trophy-left-section">
+              <div class="trophy-left-label">수집 게임</div>
+              <div class="trophy-left-number" id="trophyLeftNumber">0</div>
+            </div>
+            <div class="trophy-right-section" id="trophyStatsContainer"></div>
+          </div>
         </div>
 
         <div class="genre-grid" id="genreGrid"></div>
@@ -1143,6 +1369,7 @@
 
     function render() {
       renderBar();
+      renderTrophies();
       renderGenreGrid();
     }
 
@@ -1180,6 +1407,57 @@
       });
 
       barSection.style.display = 'block';
+    }
+
+    function renderTrophies() {
+      const trophyStatsContainer = document.getElementById('trophyStatsContainer');
+      const trophySection = document.getElementById('trophySection');
+      const trophyLeftNumber = document.getElementById('trophyLeftNumber');
+
+      trophyStatsContainer.innerHTML = '';
+
+      // 각 장르의 dex 클래스를 기반으로 카운트
+      const genres = Object.entries(genreInfo).sort((a, b) => b[1].hours - a[1].hours);
+
+      let prisimCount = 0;
+      let goldCount = 0;
+      let silverCount = 0;
+      let totalGames = 0;
+
+      genres.forEach(([ genre, info ], index) => {
+        totalGames += info.count;
+        if (index < 3) {
+          prisimCount++;
+        } else if (index < 8) {
+          goldCount++;
+        } else {
+          silverCount++;
+        }
+      });
+
+      // 좌측 게임 개수 표시
+      trophyLeftNumber.textContent = totalGames;
+
+      // 트로피 3개 렌더링
+      const trophyData = [
+        { class: 'prisim', label: '프리즘 트로피', count: prisimCount },
+        { class: 'gold', label: '골드 트로피', count: goldCount },
+        { class: 'silver', label: '실버 트로피', count: silverCount }
+      ];
+
+      trophyData.forEach(trophy => {
+        const trophyStat = document.createElement('div');
+        trophyStat.className = `trophy-stat ${trophy.class}`;
+        trophyStat.innerHTML = `
+          <div class="trophy-icon-wrapper">
+            <img class="trophy-icon-image" src="${trophy.label}.png" alt="${trophy.label}" onerror="this.style.display='none'">
+          </div>
+          <div class="trophy-count-number">${trophy.count}</div>
+        `;
+        trophyStatsContainer.appendChild(trophyStat);
+      });
+
+      trophySection.style.display = 'block';
     }
 
     function renderGenreGrid() {
