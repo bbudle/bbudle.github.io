@@ -1273,6 +1273,9 @@
       document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
       document.getElementById(pageId).classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // 브라우저 히스토리에 상태 저장
+      history.pushState({ pageId: pageId }, '', window.location.href);
     }
 
     function goBack(event) {
@@ -1283,6 +1286,19 @@
       showPage('mainPage');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // 브라우저 뒤로가기 버튼 감지
+    window.addEventListener('popstate', function(event) {
+      if (event.state && event.state.pageId) {
+        // 상태가 있으면 해당 페이지로 이동
+        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+        document.getElementById(event.state.pageId).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        // 상태가 없으면 메인 페이지로
+        showPage('mainPage');
+      }
+    });
 
     init();
   </script>
