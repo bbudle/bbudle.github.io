@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김재웅의 게임 도감</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --font-kr: 'Noto Sans KR', sans-serif;
+      --font-en: 'Inter', sans-serif;
+      --color-primary: #00d4ff;
+      --color-secondary: #FF1493;
+      --color-accent: #9932CC;
+      --color-dark-1: #0a0810;
+      --color-dark-2: #1a1530;
+      --color-dark-3: #2d1b4e;
+      --color-text: #ffffff;
+      --color-text-secondary: #9db4d4;
+      --color-success: #4ecca3;
+      --color-warning: #ffb84d;
+      --color-danger: #ff6b6b;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --glow-primary: 0 0 20px rgba(0, 212, 255, 0.5);
+      --glow-secondary: 0 0 20px rgba(255, 20, 147, 0.5);
+    }
+
+    body {
+      font-family: var(--font-kr);
+      background: linear-gradient(135deg, var(--color-dark-1), var(--color-dark-2), var(--color-dark-3));
+      color: var(--color-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      letter-spacing: -0.5px;
+      position: relative;
+    }
+
+    /* 게임 UI 상단 바 */
+    .game-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: linear-gradient(90deg, rgba(10, 8, 16, 0.95), rgba(26, 21, 48, 0.95), rgba(45, 27, 78, 0.95));
+      border-bottom: 3px solid var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .game-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    }
+
+    .game-header-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+    }
+
+    .game-header-icon {
+      position: absolute;
+      left: 20px;
+      font-size: 1.5rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .background-effect {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.25;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 20, 147, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 0%, rgba(153, 50, 204, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 90px 2rem 3rem 2rem;
+    }
+
+    .time-section {
+      margin-bottom: 4rem;
+      animation: fadeIn 1.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .time-display {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(153, 50, 204, 0.05));
+      border: 2px solid var(--color-primary);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--glow-primary), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .time-display::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 212, 255, 0.03) 2px,
+          rgba(0, 212, 255, 0.03) 4px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 2px,
+          rgba(153, 50, 204, 0.03) 2px,
+          rgba(153, 50, 204, 0.03) 4px
+        );
+      animation: scanlines 8s linear infinite;
+      pointer-events: none;
+    }
+
+    .time-display::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(10px); }
+    }
+
+    @keyframes shimmer {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+
+    .time-number {
+      font-size: 5rem;
+      font-weight: 900;
+      color: var(--color-primary);
+      line-height: 1;
+      font-family: var(--font-en);
+      letter-spacing: -2px;
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    }
+
+    .time-unit {
+      font-size: 1.3rem;
+      color: var(--color-text-secondary);
+      margin-top: 1rem;
+      font-weight: 300;
+    }
+
+    .bar-section {
+      margin-bottom: 5rem;
+      animation: fadeIn 1.4s ease;
+    }
+
+    .bar-section h3 {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      margin-bottom: 1.5rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: var(--font-en);
+    }
+
+    .bar-container {
+      display: flex;
+      gap: 2px;
+      height: 50px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3) inset, var(--glow-primary);
+      border: 1px solid var(--color-primary);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 2px;
+    }
+
+    .bar-segment {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bar-segment:hover {
+      flex-grow: 1.15;
+      box-shadow: 0 0 25px rgba(0, 212, 255, 0.5) inset;
+      filter: brightness(1.2);
+    }
+
+    .bar-shimmer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .bar-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .legend-item:hover {
+      color: var(--color-text);
+    }
+
+    .legend-color {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--color-primary);
+    }
+
+    /* ===== GENRE GRID ===== */
+    .genre-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem;
+      margin-bottom: 5rem;
+      animation: fadeIn 1.6s ease;
+    }
+
+    /* ===== GENRE CARD ===== */
+    .genre-card {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(153, 50, 204, 0.12));
+      border: 2px solid var(--color-primary);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 240px;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3) inset, var(--glow-primary);
+    }
+
+    /* 장르 카드 등급별 스타일 */
+    .genre-card.prisim-dex {
+      border-color: #D98EFF !important;
+      background: linear-gradient(135deg, rgba(217, 142, 255, 0.25) 0%, rgba(185, 85, 255, 0.15) 50%, rgba(123, 31, 255, 0.1) 100%) !important;
+      box-shadow: 0 0 40px rgba(217, 142, 255, 0.5), inset 0 0 30px rgba(217, 142, 255, 0.2) !important;
+      animation: prisim-card-glow 3s ease-in-out infinite !important;
+    }
+
+    .genre-card.gold-dex {
+      border-color: #FFD700 !important;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.12) 50%, rgba(255, 200, 0, 0.08) 100%) !important;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.15) !important;
+      animation: gold-card-glow 3s ease-in-out infinite !important;
+    }
+
+    .genre-card.silver-dex {
+      border-color: #C0C0C0 !important;
+      background: rgba(192, 192, 192, 0.06) !important;
+      box-shadow: none !important;
+    }
+
+    /* 아이콘 테두리 색상 (카드 등급과 동일) - 중복 제거 */
+    .genre-card.prisim-dex .genre-icon-wrapper {
+      border-color: #D98EFF !important;
+      box-shadow: 0 0 25px rgba(217, 142, 255, 0.6) inset, 0 0 15px rgba(217, 142, 255, 0.4) !important;
+    }
+
+    .genre-card.gold-dex .genre-icon-wrapper {
+      border-color: #FFD700 !important;
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.5) inset, 0 0 15px rgba(255, 215, 0, 0.4) !important;
+    }
+
+    .genre-card.silver-dex .genre-icon-wrapper {
+      border-color: #C0C0C0 !important;
+      box-shadow: 0 0 25px rgba(192, 192, 192, 0.5) inset, 0 0 15px rgba(192, 192, 192, 0.3) !important;
+    }
+
+    @keyframes prisim-card-glow {
+      0%, 100% {
+        box-shadow: 0 0 40px rgba(217, 142, 255, 0.5), inset 0 0 30px rgba(217, 142, 255, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 60px rgba(217, 142, 255, 0.8), inset 0 0 40px rgba(217, 142, 255, 0.3);
+      }
+    }
+
+    @keyframes gold-card-glow {
+      0%, 100% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.15);
+      }
+      50% {
+        box-shadow: 0 0 50px rgba(255, 215, 0, 0.6), inset 0 0 30px rgba(255, 215, 0, 0.25);
+      }
+    }
+
+    .genre-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    }
+
+    .genre-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-secondary), transparent);
+    }
+
+    .genre-card:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(153, 50, 204, 0.2));
+      border-color: var(--color-secondary);
+      transform: translateY(-12px);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.5) inset, var(--glow-primary), var(--glow-secondary);
+    }
+
+    .genre-icon-wrapper {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 1rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(153, 50, 204, 0.05));
+      border: 2px solid #D98EFF;
+      transition: var(--transition);
+      padding: 8px;
+    }
+
+    .genre-card:hover .genre-icon-wrapper {
+      transform: scale(1.2) rotate(8deg);
+    }
+
+    .genre-icon {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: crisp-edges;
+    }
+
+    .genre-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .genre-stats {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      font-weight: 300;
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .genre-detail-page {
+      min-height: 100vh;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(153, 50, 204, 0.15));
+      border: 2px solid var(--color-primary);
+      color: var(--color-text);
+      padding: 0.9rem 2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-bottom: 3rem;
+      transition: var(--transition);
+      font-family: var(--font-kr);
+      font-weight: 600;
+      position: relative;
+      box-shadow: var(--glow-primary), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .back-button::before {
+      content: '◀';
+      font-size: 1.2rem;
+      margin-right: 0.3rem;
+      animation: moveLeft 1.5s ease-in-out infinite;
+    }
+
+    @keyframes moveLeft {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(-3px); }
+    }
+
+    .back-button:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.35), rgba(153, 50, 204, 0.25));
+      border-color: var(--color-secondary);
+      box-shadow: var(--glow-primary), var(--glow-secondary), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transform: translateX(-4px);
+    }
+
+    .genre-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .genre-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .genre-stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(153, 50, 204, 0.08));
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      padding: 2rem;
+      border-radius: 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-family: var(--font-en);
+      font-weight: 300;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      font-family: var(--font-en);
+    }
+
+    .games-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      max-height: 70vh;
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+
+    .games-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .games-list::-webkit-scrollbar-track {
+      background: rgba(0, 212, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .games-list::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.3);
+      border-radius: 10px;
+    }
+
+    .games-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 212, 255, 0.5);
+    }
+
+    .game-card {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(153, 50, 204, 0.08));
+      border: 1px solid var(--color-primary);
+      border-radius: 10px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition);
+      min-height: 120px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.2) inset;
+    }
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.15), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .game-card:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(153, 50, 204, 0.12));
+      border-color: var(--color-secondary);
+      transform: translateX(8px);
+      box-shadow: 0 0 25px rgba(0, 212, 255, 0.3) inset, var(--glow-primary);
+    }
+
+    .game-card:hover::before {
+      left: 100%;
+    }
+
+    .game-card-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .game-card-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    .game-card-tags {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .game-tag {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.1));
+      border: 1px solid var(--color-primary);
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--color-primary);
+      transition: var(--transition);
+      white-space: nowrap;
+      font-weight: 600;
+      font-family: var(--font-en);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.2) inset;
+    }
+
+    .game-tag:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.2));
+      border-color: var(--color-primary);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.4) inset, var(--glow-primary);
+      transform: translateY(-2px);
+    }
+
+    .game-tag.expert {
+      background: linear-gradient(135deg, #D98EFF 0%, #C56EFF 25%, #B855FF 50%, #9932FF 75%, #7B1FFF 100%);
+      border: 1px solid #D98EFF;
+      color: #F0E7FF;
+      font-weight: 700;
+      animation: pulse-glow-expert 2s ease-in-out infinite;
+      box-shadow: 0 0 25px rgba(217, 142, 255, 0.7) inset, 0 0 15px rgba(200, 100, 255, 0.5);
+    }
+
+    @keyframes pulse-glow-expert {
+      0%, 100% {
+        text-shadow: 0 0 20px rgba(217, 142, 255, 0.8), 0 0 40px rgba(185, 85, 255, 0.4);
+        box-shadow: 0 0 25px rgba(217, 142, 255, 0.7) inset, 0 0 15px rgba(200, 100, 255, 0.5);
+      }
+      50% {
+        text-shadow: 0 0 30px rgba(217, 142, 255, 1), 0 0 50px rgba(185, 85, 255, 0.6);
+        box-shadow: 0 0 35px rgba(217, 142, 255, 0.9) inset, 0 0 25px rgba(185, 85, 255, 0.7);
+      }
+    }
+
+    .game-english-name {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      font-style: italic;
+      font-family: var(--font-en);
+      font-weight: 300;
+    }
+
+    .game-card-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-left: 1.5rem;
+      min-width: 200px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-hours-display {
+      text-align: right;
+      min-width: 70px;
+    }
+
+    .game-hours-big {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      line-height: 1;
+      font-family: var(--font-en);
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    .game-hours-label {
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      margin-top: 0.3rem;
+      font-weight: 300;
+    }
+
+    .game-progress-bar {
+      width: 120px;
+      height: 5px;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .game-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      border-radius: 10px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+    }
+
+    @media (max-width: 1200px) {
+      .genre-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 1rem;
+      }
+
+      .title-main {
+        font-size: 2.5rem;
+      }
+
+      .time-number {
+        font-size: 3.5rem;
+      }
+
+      .genre-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+      }
+
+      .genre-card {
+        min-height: 200px;
+        padding: 1.5rem 1rem;
+      }
+
+      .genre-icon-wrapper {
+        width: 60px;
+        height: 60px;
+      }
+
+      .genre-icon {
+        font-size: 2rem;
+      }
+
+      .genre-name {
+        font-size: 0.95rem;
+      }
+
+      .game-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .game-card-right {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 1rem;
+        gap: 1rem;
+      }
+
+      .genre-stats-section {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 게임 UI 상단 바 -->
+  <div class="game-header">
+    <div class="game-header-icon">🎮</div>
+    <h1 class="game-header-title">김재웅의 게임 도감</h1>
+  </div>
+
+  <div class="background-effect"></div>
+
+  <div class="page active" id="mainPage">
+    <div class="container">
+      <div class="time-section">
+        <h2 class="section-title">도감 진행률</h2>
+        <div class="time-display">
+          <div class="time-number" id="displayTime">0</div>
+          <div class="time-unit">시간</div>
+        </div>
+      </div>
+
+      <div class="bar-section" id="barSection" style="display: none;">
+        <h3>장르별 플레이 시간 비율</h3>
+        <div class="bar-container" id="timeBar"></div>
+        <div class="bar-legend" id="barLegend"></div>
+      </div>
+
+      <div>
+        <div class="section-header">
+          <h2 class="section-title">장르 도감</h2>
+        </div>
+
+        <div class="genre-grid" id="genreGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="genreDetailPage">
+    <div class="container">
+      <button class="back-button" onclick="goBack()">
+        돌아가기
+      </button>
+      
+      <div class="genre-detail-page">
+        <div class="genre-header">
+          <h1 class="genre-title" id="detailGenreName"></h1>
+        </div>
+
+        <div class="genre-stats-section">
+          <div class="stat-card">
+            <div class="stat-label">총 플레이 시간</div>
+            <div class="stat-value" id="detailTotalHours">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">게임 수</div>
+            <div class="stat-value" id="detailGameCount">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">평균 시간</div>
+            <div class="stat-value" id="detailAverageHours">0</div>
+          </div>
+        </div>
+
+        <div class="section-header" style="margin-bottom: 2rem;">
+          <h2 class="section-title">게임 목록</h2>
+        </div>
+        <div class="games-list" id="genreGamesList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let gameData = [];
+    let genreInfo = {};
+    let stats = {};
+
+    const genreColors = ['#FF6B9D', '#C44569', '#F8B195', '#F67280', '#355C7D', '#2E294E', '#541388', '#F1E9DA', '#FFD400', '#6BCB77', '#00d4ff', '#FF1493', '#9932CC'];
+
+    const genreIcons = {
+      '전략': '전략.png',
+      'MOBA': 'moba.png',
+      '액션': '액션.png',
+      'RTS': 'rts.png',
+      '서브컬쳐': '서브컬쳐.png',
+      'MMORPG': 'mmorpg.png',
+      'RPG': 'rpg.png',
+      '로그라이크': '로그라이크.png',
+      '캐주얼': '캐주얼.png',
+      '소울라이크': '액션.png',
+      '약탈슈팅': '약탈 슈팅.png',
+      '대전': '대전.png',
+      'FPS': 'fps.png',
+      '협력': '협동.png',
+      'TPS': 'tps.png'
+    };
+
+            const fullGameData = [
+      ['리그오브 레전드', 'PC', 'MOBA', 2000, '멀티플레이', '경쟁', 'League of Legends', 0],
+      ['문명 6', 'PC', '전략', 700, '턴제', '역사', 'Civilization VI', 1],
+      ['토탈워 삼국지', 'PC', '전략', 600, '실시간', '역사', 'Total War: THREE KINGDOMS', 1],
+      ['승리의 여신: 니케', '모바일', '서브컬쳐', 300, '기타', '기타', '', 1],
+      ['문명 5', 'PC', '전략', 300, '턴제', '역사', 'Civilization V', 0],
+      ['아이돌마스터 신데렐라 걸즈 스타라이트 스테이지', '모바일', '서브컬쳐', 300, '리듬게임', '아이돌', '', 0],
+      ['아이돌 마스터 밀리언 라이브 시어터 데이즈', '모바일', '서브컬쳐', 300, '리듬게임', '아이돌', '', 0],
+      ['몬스터 헌터 월드', '콘솔', '액션', 250, '협동', '사냥', 'Monster Hunter World', 1],
+      ['Teamfight Tactics(TFT)', 'PC', '전략', 1000, '오토배틀러', '오토 체스', '', 0],
+      ['엑스컴 2', 'PC', '전략', 250, '턴제', '전술', 'XCOM 2', 1],
+      ['삼국지13', 'PC', '전략', 200, '시뮬레이션', '역사', 'Romance of the Three Kingdoms XIII', 0],
+      ['로스트 아크', 'PC', 'MMORPG', 300, '협동', '판타지', 'Lost Ark', 0],
+      ['메이플 스토리', 'PC', 'RPG', 300, '협동', '판타지', 'MapleStory', 0],
+      ['다키스트 던전', 'PC', '로그라이크', 200, '턴제', '던전크롤', 'Darkest Dungeon', 1],
+      ['발더스 게이트3', 'PC', 'RPG', 170, '턴제', '판타지', 'Baldurs Gate 3', 0],
+      ['명일방주 엔드필드', '모바일', '서브컬쳐', 170, '타워디펜스', '건설', 'Arknights Endfield', 0],
+      ['크루세이더킹스 3', 'PC', '전략', 150, '시뮬레이션', '역사', 'Crusader Kings III', 0],
+      ['데스티니 가디언즈', 'PC', '약탈슈팅', 100, '협동', '슈팅', 'Destiny 2', 0],
+      ['우마무스메 프리티 더비', '모바일', '서브컬쳐', 100, '경주', '아이돌', '', 0],
+      ['프린세스 커넥트! Re:Dive', '모바일', '서브컬쳐', 100, '턴제', '판타지', '', 0],
+      ['워프레임', 'PC', '약탈슈팅', 100, '협동', '슈팅', 'Warframe', 0],
+      ['마블 2 베너로드', 'PC', '전략', 100, '전술', '시뮬레이션', 'Mount & Blade II: Bannerlord', 0],
+      ['스타크래프트 1', 'PC', 'RTS', 200, '실시간', '경쟁', 'StarCraft', 0],
+      ['월드 오브 워크래프트', 'PC', 'MMORPG', 70, '협동', '판타지', 'World of Warcraft', 0],
+      ['붕괴 스타레일', '모바일', '서브컬쳐', 125, '턴제', '우주', 'Honkai Star Rail', 0],
+      ['스타크래프트 2', 'PC', 'RTS', 200, '실시간', '경쟁', 'StarCraft II', 0],
+      ['Fate/Grand Order', '모바일', '서브컬쳐', 100, '턴제', '판타지', 'Fate Grand Order', 0],
+      ['히어로 오브 스톰', 'PC', 'MOBA', 100, 'MOBA', '경쟁', 'Heroes of the Storm', 0],
+      ['스타듀벨리', 'PC', '전략', 100, '농장', '여유로움', 'Stardew Valley', 0],
+      ['메이플 키우기', '모바일', '캐주얼', 150, '방치형', 'RPG', 'Maple Grow', 1],
+      ['슬레이 더 스파이어', 'PC', '로그라이크', 70, '카드게임', '로그라이크', 'Slay the Spire', 0],
+      ['카오스 제로 나이트메어', '모바일', '서브컬쳐', 100, '턴제', '덱빌딩', '', 0],
+      ['소녀 전선', '모바일', '서브컬쳐', 100, '턴제', '전술', 'Girls Frontline', 0],
+      ['하스스톤', 'PC', '대전', 100, '카드게임', '경쟁', 'Hearthstone', 0],
+      ['명조', '모바일', '서브컬쳐', 70, '턴제', '판타지', 'Mystic', 0],
+      ['몬스터 헌터 와일즈', 'PC', '액션', 50, '협동', '사냥', 'Monster Hunter Wilds', 0],
+      ['엘든링', 'PC', '소울라이크', 70, '액션', '고난이도', 'Elden Ring', 0],
+      ['포더킹', 'PC', '협동', 50, '협동', '슈팅', '', 0],
+      ['펠월드', 'PC', '액션', 50, '액션RPG', '크리쳐', 'Palworld', 0],
+      ['데드 바이 데이라이트', 'PC', '대전', 70, '비대칭', '공포', 'Dead by Daylight', 0],
+      ['다키스트 던전 2', 'PC', '로그라이크', 50, '턴제', '던전크롤', 'Darkest Dungeon II', 0],
+      ['위쳐 3', 'PC', '액션', 50, '오픈월드', '판타지', 'The Witcher 3', 0],
+      ['니어 오토마타', '콘솔', '액션', 50, 'RPG', '스토리', 'NieR Automata', 0],
+      ['아노 1800', 'PC', '전략', 50, '도시건설', '경제', 'Anno 1800', 0],
+      ['이터널 리턴', 'PC', 'MOBA', 50, '배틀로얄', 'PvP', 'Eternal Return', 0],
+      ['워크래프트 3', 'PC', 'RTS', 50, 'RTS', '경쟁', 'Warcraft III', 0],
+      ['마비노기 모바일', '모바일', 'RPG', 70, 'MMORPG', '판타지', 'Mabinogi Mobile', 0],
+      ['클레르 옵스퀴르: 33 원정대', 'PC', '액션', 50, '턴제', '스토리', '', 0],
+      ['래토피아', 'PC', '전략', 50, '도시 건설', '경제', 'Ratopia', 0],
+      ['젠레스 존 제로', '모바일', '서브컬쳐', 70, '액션', 'RPG', 'Zenless Zone Zero', 0],
+      ['인왕', '콘솔', '소울라이크', 50, '액션', 'RPG', 'Sekiro Shadows Die Twice', 0],
+      ['워 테일즈', 'PC', '전략', 50, '턴제', '던전크롤', 'Wartales', 0],
+      ['문명 7', 'PC', '전략', 40, '시뮬레이션', '역사', 'Civilization VII', 0],
+      ['매너 로드', 'PC', '전략', 35, '건설', '시뮬레이션', 'Manor Lords', 0],
+      ['엔터 더 건전', 'PC', '로그라이크', 30, '탄막 슈팅', '던전크롤', 'Enter the Gungeon', 0],
+      ['포트리스 사가', '모바일', '캐주얼', 50, '방치형', 'RPG', 'Fortress Saga', 0],
+      ['슬레이 더 스파이어 2', 'PC', '로그라이크', 50, '카드게임', '덱빌딩', 'Slay the Spire 2', 0],
+      ['고양이 오피스', '모바일', '캐주얼', 50, '시뮬레이션', '캐주얼', 'Cat Office', 0],
+      ['로스트 소드', '모바일', '서브컬쳐', 30, 'MMORPG', '판타지', 'Lost Sword', 0],
+      ['카이로 소프트 : 게임개발 스토리', '모바일', '캐주얼', 30, '기타', '기타', '', 0],
+      ['작혼 : 리치 마작', '모바일', '서브컬쳐', 30, '마작', '미소녀', '', 0],
+      ['갓 오브 워', '콘솔', '액션', 25, '어드벤처', '신화', 'God of War', 0],
+      ['톰 클랜시 레인보우 식스 시즈', 'PC', 'FPS', 25, 'FPS', '경쟁', 'Tom Clancy\'s Rainbow Six® Siege', 0],
+      ['고스트 오브 쓰시마', '콘솔', '액션', 25, '어드벤처', '역사', 'Ghost of Tsushima', 0],
+      ['붉은 사막', 'PC', '액션', 30, 'MMORPG', '판타지', '', 0],
+      ['쉐도우 버스 : 월드 비온드', 'PC', '서브컬쳐', 25, '카드게임', '판타지', 'Shadowverse: Worlds Beyond', 0],
+      ['메카 브레이크', 'PC', 'TPS', 25, '격투', '메카', 'Mecha Break', 0],
+      ['다크소울 2', 'PC', '소울라이크', 50, '액션', '고난이도', 'Dark Souls II', 0],
+      ['데드 스페이스 2', 'PC', 'TPS', 25, '슈팅', '공포', '', 0],
+      ['뉴럴 클라우드', '모바일', '서브컬쳐', 25, '기타', '기타', '', 0],
+      ['블루 아카이브', '모바일', '서브컬쳐', 25, '턴제', '학원', '', 0],
+      ['쉐도우 오브 워', 'PC', '액션', 25, '기타', '기타', '', 0],
+      ['어쎄신 크리드 시리즈', 'PC', '액션', 50, '어드벤처', '역사', '', 0],
+      ['바이오 쇼크 인피니티', 'PC', '액션', 25, '슈팅', '판타지', 'Bioshock Infinite', 0],
+      ['세키로', 'PC', '소울라이크', 50, '액션', '고난이도', '', 0],
+      ['데드 스페이스', 'PC', 'TPS', 30, '기타', '기타', '', 0],
+      ['다크소울', 'PC', '소울라이크', 50, '액션', '고난이도', '', 0],
+      ['원신', '모바일', '서브컬쳐', 25, '액션RPG', '미소녀', '', 0],
+      ['명일 방주', '모바일', '서브컬쳐', 25, '기타', '기타', '', 0],
+      ['베틀그라운드', 'PC', 'FPS', 50, '배틀로얄', 'FPS', '', 0],
+      ['데이 아 빌리언즈', 'PC', '전략', 25, '전략', '생존', 'They Are Billions', 0],
+      ['갓 오브 워 라그나로크', '콘솔', '액션', 40, '어드벤처', '신화', '', 0],
+      ['스파이더맨', '콘솔', '액션', 40, '어드벤처', '슈퍼히어로', '', 0],
+      ['어게인스트 더 스톰', 'PC', '전략', 30, '로그라이크', '도시건설', 'Against the Storm', 0],
+      ['그랑판타지 리링크', 'PC', '서브컬쳐', 25, '액션RPG', '협동', 'GRANBLUE FANTASY: Relink', 0],
+      ['에이펙스 레전드', 'PC', 'FPS', 50, '배틀로얄', 'FPS', 'Apex Legends', 0],
+      ['하데스 2(얼리)', 'PC', '로그라이크', 25, '로그라이크', '액션', '', 0],
+      ['호라이즌 제로 던', '콘솔', '액션', 50, 'RPG', '미래', 'Horizon Zero Dawn', 0],
+      ['데빌 메이 크라이 5', 'PC', '액션', 50, '액션', '스타일리시', 'Devil May Cry 5', 0],
+      ['데빌 메이 크라이 4', 'PC', '액션', 50, '기타', '기타', 'Devil May Cry 4 ', 0],
+      ['Diplomacy is Not an Option', 'PC', '전략', 25, '전략', '패턴', '', 0],
+      ['아이돌 마스터 스탈릿 시즌', 'PC', '서브컬쳐', 25, '리듬게임', '아이돌', '', 0],
+      ['아이돌 마스터 스텔라 스테이지', '콘솔', '서브컬쳐', 25, '리듬게임', '아이돌', '', 0],
+      ['팀파이트 매니저', 'PC', '전략', 25, '자동배틀', '전략', '', 0],
+      ['소녀전선 2', '모바일', '서브컬쳐', 25, '턴제', '전술', 'Girls Frontline 2', 0],
+      ['악마가 되었다.', '모바일', '캐주얼', 25, '로그라이크', '캐주얼', '', 0],
+      ['AFK : 새로운여정', '모바일', '캐주얼', 25, '방치형', '판타지', '', 0],
+      ['세븐나이츠 키우기', '모바일', '캐주얼', 25, '방치형', '성장', '', 0],
+      ['MAD GAMES TYCOON', 'PC', '캐주얼', 20, '경영', '시뮬레이션', '', 0],
+      ['엘든링 밤의 통치자', 'PC', '소울라이크', 20, '액션', '고난이도', '', 0],
+      ['뱀파이어 서바이벌스', 'PC', '캐주얼', 20, '탄막 슈팅', '로그라이크', 'Vampire Survivors', 0],
+      ['브라운더스트 2', '모바일', '서브컬쳐', 30, '턴제', '판타지', 'Brown Dust 2', 0],
+      ['헬다이버즈 2', 'PC', '협동', 10, '슈팅', '협동', 'Helldivers 2', 0],
+      ['Evolve Stage 2', 'PC', '협동', 10, '비대칭', '협동', '', 0],
+      ['구스 구스 덕', 'PC', '협동', 10, '스텔스', '협동', '', 0],
+      ['어몽어스', 'PC', '협동', 10, '소셜디덕션', '협동', 'Among Us', 0],
+      ['아르멜로', 'PC', '전략', 10, '턴제', '전략', 'Armello', 0],
+      ['로드 나인', '모바일', 'MMORPG', 10, 'MMORPG', '판타지', 'Lord Nine', 0],
+      ['운빨존많겜', '모바일', '캐주얼', 10, '디펜스', '캐주얼', '', 0],
+      ['포켓몬 카드 게임', '모바일', '캐주얼', 10, '카드게임', '수집', '', 0],
+      ['퍼스트 디센던트', 'PC', '약탈슈팅', 10, 'RPG', '슈팅', 'The First Descendant', 0],
+      ['킹덤컴:딜리버리2', 'PC', '액션', 10, 'RPG', '역사', '', 0],
+      ['파티 애니멀즈', 'PC', '캐주얼', 10, '파티게임', '협동', 'Party Animals', 0],
+      ['아머드 코어 6 루비콘의 화염', 'PC', 'TPS', 10, '액션', '메카', '', 0],
+      ['휴먼 카인드', 'PC', '전략', 10, '턴제', '역사', '', 0],
+      ['삼국지 14', 'PC', '전략', 10, '시뮬레이션', '역사', 'Romance of the Three Kingdoms XIV', 0],
+      ['아르멜로', 'PC', '전략', 10, '턴제', '전략', 'Armello', 0],
+      ['메카 브레이크', 'PC', '대전', 10, '격투', '메카', 'Mecha Break', 0],
+      ['달토끼 키우기', '모바일', '캐주얼', 10, '방치형', '캐주얼', '', 0],
+      ['궁수의전설2', '모바일', '캐주얼', 10, '액션', '판타지', '', 0],
+      ['특급 주술대전', '모바일', '캐주얼', 10, '카드게임', '판타지', '', 0],
+      ['냥코 대전쟁', '모바일', '캐주얼', 10, '턴제', '캐주얼', '', 0],
+      ['헬로타운', '모바일', '캐주얼', 10, '시뮬레이션', '도시건설', 'Hello Town', 0],
+      ['고양이 마법학교', '모바일', '캐주얼', 10, '턴제', '마법', '', 0],
+      ['Knife Hit', '모바일', '캐주얼', 10, '플래시게임', '캐주얼', '', 0],
+      ['가십하버', '모바일', '캐주얼', 5, '소셜네트워크', '캐주얼', 'Gossip Harbor', 0],
+      ['MONOPOLY GO', '모바일', '캐주얼', 5, '보드게임', '캐주얼', '', 0],
+      ['이완', '모바일', '서브컬쳐', 10, '턴제', '판타지', 'Ewan', 0],
+      ['오버워치', 'PC', 'FPS', 100, 'FPS', '경쟁', 'Overwatch', 0],
+      ['엑스컴 1', 'PC', '전략', 150, '턴제', '전술', 'XCOM 1', 0],
+      ['패스 오브 엑자일 2', 'PC', 'RPG', 50, '액션RPG', '던전크롤', 'Path of Exile 2', 0],
+      ['디아블로 3', 'PC', 'RPG', 100, '액션RPG', '던전크롤', 'Diablo III', 0],
+      ['명일방주', '모바일', '서브컬쳐', 100, '기타', '기타', '', 0],
+      ['귀무자 2', '콘솔', '액션', 50, '액션', '고난이도', 'Ghostrunner 2', 0],
+      ['베틀필드 시리즈', 'PC', 'FPS', 100, 'FPS', '멀티플레이', 'Battlefield Series', 0],
+      ['RATOPIA', 'PC', '전략', 75, '도시건설', '경제', 'RATOPIA', 0],
+      ['리스크 오브 레인 2', 'PC', '로그라이크', 10, '슈팅', '협동', 'RISK OF RAIN 2', 0],
+    ];
+
+    function getGenreIcon(genre) {
+      return genreIcons[genre] || genreIcons['전략'];
+    }
+
+    function getGenreGradeClass(hours, maxHours) {
+      const ratio = hours / maxHours;
+      if (ratio < 0.3) return 'silver';
+      if (ratio < 0.7) return 'gold';
+      return 'prism';
+    }
+
+    function init() {
+      loadGameData();
+    }
+
+    function loadGameData() {
+      gameData = fullGameData.map(data => ({
+        '게임 이름': data[0],
+        '기기': data[1],
+        '분류': data[2],
+        '시간': data[3],
+        '태그1': data[4],
+        '태그2': data[5],
+        '영어이름': data[6],
+        '고수': data[7]
+      }));
+
+      calculateStats(gameData);
+      render();
+      animateTime();
+    }
+
+    function calculateStats(data) {
+      genreInfo = {};
+      let totalTime = 0;
+
+      data.forEach(game => {
+        const genres = (game['분류'] || '').split(',') || ['기타'];
+        const hours = Number(game['시간']) || 0;
+        totalTime += hours;
+
+        genres.forEach(genre => {
+          const trimmed = genre.trim();
+          if (!genreInfo[trimmed]) {
+            genreInfo[trimmed] = { count: 0, hours: 0, games: [] };
+          }
+          genreInfo[trimmed].count += 1;
+          genreInfo[trimmed].hours += hours;
+          genreInfo[trimmed].games.push(game);
+        });
+      });
+
+      stats = { totalTime, genreInfo };
+    }
+
+    function animateTime() {
+      let current = 0;
+      const target = stats.totalTime;
+      const duration = 2500;
+      const startTime = Date.now();
+
+      function update() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        current = Math.floor(target * progress);
+        document.getElementById('displayTime').textContent = current.toLocaleString();
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    function render() {
+      renderBar();
+      renderGenreGrid();
+    }
+
+    function renderBar() {
+      const genres = Object.entries(genreInfo).sort((a, b) => b[1].hours - a[1].hours);
+      const barContainer = document.getElementById('timeBar');
+      const legend = document.getElementById('barLegend');
+      const barSection = document.getElementById('barSection');
+
+      barContainer.innerHTML = '';
+      legend.innerHTML = '';
+
+      const topGenres = genres.slice(0, 5);
+      const otherGenres = genres.slice(5);
+      const otherHours = otherGenres.reduce((sum, [_, info]) => sum + info.hours, 0);
+
+      const displayGenres = otherHours > 0 
+        ? [...topGenres, ['기타', { hours: otherHours, count: otherGenres.length }]]
+        : topGenres;
+
+      displayGenres.forEach(([ genre, info ], idx) => {
+        const percentage = (info.hours / stats.totalTime) * 100;
+        const segment = document.createElement('div');
+        segment.className = 'bar-segment';
+        segment.style.flex = percentage;
+        segment.style.background = genreColors[idx % genreColors.length];
+        segment.innerHTML = '<div class="bar-shimmer"></div>';
+        segment.title = `${genre}: ${info.hours}시간`;
+        barContainer.appendChild(segment);
+
+        const legendItem = document.createElement('div');
+        legendItem.className = 'legend-item';
+        legendItem.innerHTML = `<div class="legend-color" style="background: ${genreColors[idx % genreColors.length]}"></div><span>${genre} ${Math.round(percentage)}%</span>`;
+        legend.appendChild(legendItem);
+      });
+
+      barSection.style.display = 'block';
+    }
+
+    function renderGenreGrid() {
+      const genres = Object.entries(genreInfo).sort((a, b) => b[1].hours - a[1].hours);
+      const grid = document.getElementById('genreGrid');
+
+      grid.innerHTML = '';
+      const maxHours = Math.max(...genres.map(([_, info]) => info.hours));
+
+      genres.forEach(([ genre, info ], index) => {
+        const gradeClass = getGenreGradeClass(info.hours, maxHours);
+        // 시간 기준 등급 판정
+        let dexClass = 'silver-dex'; // 기본값: 실버
+        if (index < 3) {
+          dexClass = 'prisim-dex'; // 상위 3개: 프리즘
+        } else if (index < 8) {
+          dexClass = 'gold-dex'; // 4~8위: 골드
+        }
+        
+        const card = document.createElement('div');
+        card.className = `genre-card ${dexClass}`; 
+        const iconPath = getGenreIcon(genre);
+        
+        card.innerHTML = `
+          <div class="genre-icon-wrapper ${gradeClass}">
+            <img class="genre-icon" src="${iconPath}" alt="${genre}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E'">
+          </div>
+          <div class="genre-name">${genre}</div>
+          <div class="genre-stats">${info.hours}h · ${info.count}개</div>
+        `;
+
+        card.addEventListener('click', () => showGenreDetail(genre));
+        grid.appendChild(card);
+      });
+    }
+
+    function showGenreDetail(genre) {
+      const info = genreInfo[genre];
+
+      document.getElementById('detailGenreName').textContent = genre;
+      document.getElementById('detailTotalHours').textContent = info.hours;
+      document.getElementById('detailGameCount').textContent = info.count;
+      document.getElementById('detailAverageHours').textContent = Math.round(info.hours / info.count);
+
+      const genreGamesList = document.getElementById('genreGamesList');
+      genreGamesList.innerHTML = '';
+
+      const genreGames = gameData
+        .filter(game => game['분류'] === genre)
+        .sort((a, b) => (Number(b['시간']) || 0) - (Number(a['시간']) || 0));
+
+      const maxHours = Math.max(...genreGames.map(g => Number(g['시간']) || 0));
+
+      genreGames.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        const hours = Number(game['시간']) || 0;
+        const progressPercent = (hours / maxHours) * 100;
+        const isExpert = game['고수'] === 1;
+
+        let tagsHTML = `<span class="game-tag">${game['기기']}</span>`;
+        if (game['태그1']) tagsHTML += `<span class="game-tag">${game['태그1']}</span>`;
+        if (game['태그2']) tagsHTML += `<span class="game-tag">${game['태그2']}</span>`;
+        if (isExpert) tagsHTML += `<span class="game-tag expert">고수</span>`;
+
+        card.innerHTML = `
+          <div class="game-card-left">
+            <div class="game-card-title-row">
+              <div class="game-card-title">${game['게임 이름']}</div>
+              <div class="game-card-tags">${tagsHTML}</div>
+            </div>
+            <div class="game-english-name">${game['영어이름']}</div>
+          </div>
+          <div class="game-card-right">
+            <div class="game-hours-display">
+              <div class="game-hours-big">${hours}</div>
+              <div class="game-hours-label">시간</div>
+            </div>
+            <div class="game-progress-bar">
+              <div class="game-progress-fill" style="width: ${progressPercent}%"></div>
+            </div>
+          </div>
+        `;
+        genreGamesList.appendChild(card);
+      });
+
+      showPage('genreDetailPage');
+    }
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goBack() {
+      showPage('mainPage');
+    }
+
+    init();
+  </script>
+</body>
+</html>
