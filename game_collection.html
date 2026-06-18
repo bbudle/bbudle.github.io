@@ -1059,6 +1059,14 @@
       }
     }
   </style>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VLHHRWB8MH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VLHHRWB8MH');
+  </script>
 </head>
 <body>
   <!-- 게임 UI 상단 바 -->
@@ -1170,150 +1178,6 @@
       'TPS': 'tps.png'
     };
 
-                    const fullGameData = [
-      ['리그오브 레전드', 'PC', 'MOBA', 2500, '멀티플레이', '경쟁', '', '최근', 'League of Legends'],
-      ['문명 6', 'PC', '전략', 700, '턴제', '역사', 'Best', '', 'Civilization VI'],
-      ['토탈워 삼국지', 'PC', '전략', 600, '실시간', '역사', '', '', 'Total War: THREE KINGDOMS'],
-      ['승리의 여신: 니케', '모바일', '서브컬쳐', 300, '슈팅', 'RPG', 'Best', '최근', ''],
-      ['문명 5', 'PC', '전략', 300, '턴제', '역사', '', '', 'Civilization V'],
-      ['아이돌마스터 신데렐라 걸즈 스타라이트 스테이지', '모바일', '서브컬쳐', 300, '리듬게임', '아이돌', '', '', ''],
-      ['아이돌 마스터 밀리언 라이브 시어터 데이즈', '모바일', '서브컬쳐', 300, '리듬게임', '아이돌', '', '', ''],
-      ['몬스터 헌터 월드', '콘솔', '액션', 250, '협동', '사냥', '', '', 'Monster Hunter World'],
-      ['Teamfight Tactics(TFT)', 'PC', '전략', 1500, '오토배틀러', '오토 체스', '', '최근', ''],
-      ['엑스컴 2', 'PC', '전략', 250, '턴제', '전술', 'Best', '', 'XCOM 2'],
-      ['삼국지13', 'PC', '전략', 200, '시뮬레이션', '역사', '', '', 'Romance of the Three Kingdoms XIII'],
-      ['로스트 아크', 'PC', 'MMORPG', 300, '협동', '판타지', '', '', 'Lost Ark'],
-      ['메이플 스토리', 'PC', 'RPG', 300, '협동', '판타지', '', '', 'MapleStory'],
-      ['다키스트 던전', 'PC', '로그라이크', 200, '턴제', '던전크롤', '', '', 'Darkest Dungeon'],
-      ['발더스 게이트3', 'PC', 'RPG', 170, '턴제', '판타지', '', '', 'Baldurs Gate 3'],
-      ['명일방주 엔드필드', '모바일', '서브컬쳐', 170, '타워디펜스', '건설', '', '최근', 'Arknights Endfield'],
-      ['크루세이더킹스 3', 'PC', '전략', 150, '시뮬레이션', '역사', '', '', 'Crusader Kings III'],
-      ['데스티니 가디언즈', 'PC', '약탈슈팅', 100, '협동', '슈팅', '', '', 'Destiny 2'],
-      ['우마무스메 프리티 더비', '모바일', '서브컬쳐', 100, '경주', '아이돌', '', '', ''],
-      ['프린세스 커넥트! Re:Dive', '모바일', '서브컬쳐', 100, '턴제', '판타지', '', '', ''],
-      ['워프레임', 'PC', '약탈슈팅', 100, '협동', '슈팅', '', '', 'Warframe'],
-      ['마블 2 베너로드', 'PC', '전략', 100, '전술', '시뮬레이션', '', '', 'Mount & Blade II: Bannerlord'],
-      ['스타크래프트 1', 'PC', 'RTS', 200, '실시간', '경쟁', '', '', 'StarCraft'],
-      ['월드 오브 워크래프트', 'PC', 'MMORPG', 70, '협동', '판타지', '', '', 'World of Warcraft'],
-      ['붕괴 스타레일', '모바일', '서브컬쳐', 140, '턴제', '우주', '', '', 'Honkai Star Rail'],
-      ['스타크래프트 2', 'PC', 'RTS', 200, '실시간', '경쟁', '', '', 'StarCraft II'],
-      ['Fate/Grand Order', '모바일', '서브컬쳐', 100, '턴제', '판타지', '', '', 'Fate Grand Order'],
-      ['히어로 오브 스톰', 'PC', 'MOBA', 100, 'MOBA', '경쟁', '', '', 'Heroes of the Storm'],
-      ['스타듀벨리', 'PC', '전략', 100, '농장', '여유로움', '', '', 'Stardew Valley'],
-      ['메이플 키우기', '모바일', '캐주얼', 170, '방치형', 'RPG', 'Best', '최근', 'Maple Grow'],
-      ['슬레이 더 스파이어', 'PC', '로그라이크', 70, '카드게임', '로그라이크', '', '', 'Slay the Spire'],
-      ['카오스 제로 나이트메어', '모바일', '서브컬쳐', 100, '턴제', '덱빌딩', '', '', ''],
-      ['소녀 전선', '모바일', '서브컬쳐', 100, '턴제', '전술', '', '', 'Girls Frontline'],
-      ['하스스톤', 'PC', '대전', 100, '카드게임', '경쟁', '', '', 'Hearthstone'],
-      ['명조', '모바일', '서브컬쳐', 90, '액션RPG', '판타지', '', '', 'Mystic'],
-      ['몬스터 헌터 와일즈', 'PC', '액션', 50, '협동', '사냥', '', '', 'Monster Hunter Wilds'],
-      ['엘든링', 'PC', '소울라이크', 70, '액션', '고난이도', '', '', 'Elden Ring'],
-      ['포더킹', 'PC', '협동', 50, '협동', '슈팅', '', '', ''],
-      ['펠월드', 'PC', '액션', 50, '오픈월드', '시뮬레이션', '', '', 'Palworld'],
-      ['데드 바이 데이라이트', 'PC', '대전', 70, '비대칭', '공포', '', '', 'Dead by Daylight'],
-      ['다키스트 던전 2', 'PC', '로그라이크', 50, '턴제', '던전크롤', '', '', 'Darkest Dungeon II'],
-      ['위쳐 3', 'PC', '액션', 50, '오픈월드', '판타지', '', '', 'The Witcher 3'],
-      ['니어 오토마타', '콘솔', '액션', 50, 'RPG', '스토리', '', '', 'NieR Automata'],
-      ['아노 1800', 'PC', '전략', 50, '도시건설', '경제', '', '', 'Anno 1800'],
-      ['이터널 리턴', 'PC', 'MOBA', 50, '배틀로얄', 'PvP', '', '', 'Eternal Return'],
-      ['워크래프트 3', 'PC', 'RTS', 50, 'RTS', '경쟁', '', '', 'Warcraft III'],
-      ['마비노기 모바일', '모바일', 'RPG', 70, 'MMORPG', '판타지', '', '', 'Mabinogi Mobile'],
-      ['클레르 옵스퀴르: 33 원정대', 'PC', '액션', 50, '턴제', '스토리', '', '', ''],
-      ['래토피아', 'PC', '전략', 50, '도시 건설', '경제', '', '', 'Ratopia'],
-      ['젠레스 존 제로', '모바일', '서브컬쳐', 70, '액션', 'RPG', '', '', 'Zenless Zone Zero'],
-      ['인왕', '콘솔', '소울라이크', 50, '액션', 'RPG', '', '', 'Sekiro Shadows Die Twice'],
-      ['워 테일즈', 'PC', '전략', 50, '턴제', '던전크롤', '', '', 'Wartales'],
-      ['문명 7', 'PC', '전략', 100, '시뮬레이션', '역사', '', '최근', 'Civilization VII'],
-      ['매너 로드', 'PC', '전략', 35, '건설', '시뮬레이션', '', '', 'Manor Lords'],
-      ['엔터 더 건전', 'PC', '로그라이크', 30, '탄막 슈팅', '던전크롤', '', '', 'Enter the Gungeon'],
-      ['포트리스 사가', '모바일', '캐주얼', 50, '방치형', 'RPG', '', '', 'Fortress Saga'],
-      ['슬레이 더 스파이어 2', 'PC', '로그라이크', 50, '카드게임', '덱빌딩', '', '최근', 'Slay the Spire 2'],
-      ['고양이 오피스', '모바일', '캐주얼', 50, '시뮬레이션', '캐주얼', '', '', 'Cat Office'],
-      ['로스트 소드', '모바일', '서브컬쳐', 30, 'MMORPG', '판타지', '', '', 'Lost Sword'],
-      ['카이로 소프트 : 게임개발 스토리', '모바일', '캐주얼', 30, '기타', '기타', '', '', ''],
-      ['작혼 : 리치 마작', '모바일', '서브컬쳐', 30, '마작', '미소녀', '', '', ''],
-      ['갓 오브 워', '콘솔', '액션', 25, '어드벤처', '신화', '', '', 'God of War'],
-      ['톰 클랜시 레인보우 식스 시즈', 'PC', 'FPS', 25, 'FPS', '경쟁', '', '', 'Tom Clancy\'s Rainbow Six® Siege'],
-      ['고스트 오브 쓰시마', '콘솔', '액션', 25, '어드벤처', '역사', '', '', 'Ghost of Tsushima'],
-      ['붉은 사막', 'PC', '액션', 30, 'MMORPG', '판타지', '', '', ''],
-      ['쉐도우 버스 : 월드 비온드', 'PC', '서브컬쳐', 25, '카드게임', '판타지', '', '', 'Shadowverse: Worlds Beyond'],
-      ['메카 브레이크', 'PC', 'TPS', 25, '격투', '메카', '', '', 'Mecha Break'],
-      ['다크소울 2', 'PC', '소울라이크', 50, '액션', '고난이도', '', '', 'Dark Souls II'],
-      ['데드 스페이스 2', 'PC', 'TPS', 25, '슈팅', '공포', '', '', ''],
-      ['뉴럴 클라우드', '모바일', '서브컬쳐', 25, '기타', '기타', '', '', ''],
-      ['블루 아카이브', '모바일', '서브컬쳐', 25, '턴제', '학원', '', '', ''],
-      ['쉐도우 오브 워', 'PC', '액션', 25, '기타', '기타', '', '', ''],
-      ['어쎄신 크리드 시리즈', 'PC', '액션', 50, '어드벤처', '역사', '', '', ''],
-      ['바이오 쇼크 인피니티', 'PC', '액션', 25, '슈팅', '판타지', '', '', 'Bioshock Infinite'],
-      ['세키로', 'PC', '소울라이크', 50, '액션', '고난이도', '', '', ''],
-      ['데드 스페이스', 'PC', 'TPS', 30, '기타', '기타', '', '', ''],
-      ['다크소울', 'PC', '소울라이크', 50, '액션', '고난이도', '', '', ''],
-      ['원신', '모바일', '서브컬쳐', 25, '오픈월드', '액션RPG', '', '', ''],
-      ['명일 방주', '모바일', '서브컬쳐', 25, '기타', '기타', '', '', ''],
-      ['베틀그라운드', 'PC', 'FPS', 50, '배틀로얄', 'FPS', '', '', ''],
-      ['데이 아 빌리언즈', 'PC', '전략', 25, '전략', '생존', '', '', 'They Are Billions'],
-      ['갓 오브 워 라그나로크', '콘솔', '액션', 40, '어드벤처', '신화', '', '', ''],
-      ['스파이더맨', '콘솔', '액션', 40, '어드벤처', '슈퍼히어로', '', '', ''],
-      ['어게인스트 더 스톰', 'PC', '전략', 30, '로그라이크', '도시건설', '', '', 'Against the Storm'],
-      ['그랑판타지 리링크', 'PC', '서브컬쳐', 25, '액션RPG', '협동', '', '', 'GRANBLUE FANTASY: Relink'],
-      ['에이펙스 레전드', 'PC', 'FPS', 50, '배틀로얄', 'FPS', '', '', 'Apex Legends'],
-      ['하데스 2(얼리)', 'PC', '로그라이크', 25, '로그라이크', '액션', '', '', ''],
-      ['호라이즌 제로 던', '콘솔', '액션', 50, 'RPG', '미래', '', '', 'Horizon Zero Dawn'],
-      ['데빌 메이 크라이 5', 'PC', '액션', 50, '액션', '스타일리시', '', '', 'Devil May Cry 5'],
-      ['데빌 메이 크라이 4', 'PC', '액션', 50, '기타', '기타', '', '', 'Devil May Cry 4 '],
-      ['Diplomacy is Not an Option', 'PC', '전략', 25, '전략', '패턴', '', '', ''],
-      ['아이돌 마스터 스탈릿 시즌', 'PC', '서브컬쳐', 25, '리듬게임', '아이돌', '', '', ''],
-      ['아이돌 마스터 스텔라 스테이지', '콘솔', '서브컬쳐', 25, '리듬게임', '아이돌', '', '', ''],
-      ['팀파이트 매니저', 'PC', '전략', 25, '자동배틀', '전략', '', '', ''],
-      ['소녀전선 2', '모바일', '서브컬쳐', 25, '턴제', '전술', '', '', 'Girls Frontline 2'],
-      ['악마가 되었다.', '모바일', '캐주얼', 25, '로그라이크', '캐주얼', '', '', ''],
-      ['AFK : 새로운여정', '모바일', '캐주얼', 25, '방치형', '판타지', '', '', ''],
-      ['세븐나이츠 키우기', '모바일', '캐주얼', 25, '방치형', '성장', '', '', ''],
-      ['MAD GAMES TYCOON', 'PC', '캐주얼', 20, '경영', '시뮬레이션', '', '', ''],
-      ['엘든링 밤의 통치자', 'PC', '소울라이크', 20, '액션', '고난이도', '', '', ''],
-      ['뱀파이어 서바이벌스', 'PC', '캐주얼', 20, '탄막 슈팅', '로그라이크', '', '', 'Vampire Survivors'],
-      ['브라운더스트 2', '모바일', '서브컬쳐', 30, '턴제', '판타지', '', '', 'Brown Dust 2'],
-      ['헬다이버즈 2', 'PC', '협동', 10, '슈팅', '협동', '', '', 'Helldivers 2'],
-      ['Evolve Stage 2', 'PC', '협동', 10, '비대칭', '협동', '', '', ''],
-      ['구스 구스 덕', 'PC', '협동', 10, '스텔스', '협동', '', '', ''],
-      ['어몽어스', 'PC', '협동', 10, '소셜디덕션', '협동', '', '', 'Among Us'],
-      ['아르멜로', 'PC', '전략', 10, '턴제', '전략', '', '', 'Armello'],
-      ['로드 나인', '모바일', 'MMORPG', 10, '협동', '판타지', '', '', 'Lord Nine'],
-      ['운빨존많겜', '모바일', '캐주얼', 10, '디펜스', '캐주얼', '', '', ''],
-      ['포켓몬 카드 게임', '모바일', '캐주얼', 10, '카드게임', '수집', '', '', ''],
-      ['퍼스트 디센던트', 'PC', '약탈슈팅', 10, 'RPG', '슈팅', '', '', 'The First Descendant'],
-      ['킹덤컴:딜리버리2', 'PC', '액션', 10, 'RPG', '역사', '', '', ''],
-      ['파티 애니멀즈', 'PC', '캐주얼', 10, '파티게임', '협동', '', '', 'Party Animals'],
-      ['아머드 코어 6 루비콘의 화염', 'PC', 'TPS', 10, '액션', '메카', '', '', ''],
-      ['휴먼 카인드', 'PC', '전략', 10, '턴제', '역사', '', '', ''],
-      ['삼국지 14', 'PC', '전략', 10, '시뮬레이션', '역사', '', '', 'Romance of the Three Kingdoms XIV'],
-      ['아르멜로', 'PC', '전략', 10, '턴제', '전략', '', '', 'Armello'],
-      ['메카 브레이크', 'PC', '대전', 10, '격투', '메카', '', '', 'Mecha Break'],
-      ['달토끼 키우기', '모바일', '캐주얼', 10, '방치형', '캐주얼', '', '', ''],
-      ['궁수의전설2', '모바일', '캐주얼', 10, '액션', '판타지', '', '', ''],
-      ['특급 주술대전', '모바일', '캐주얼', 10, '카드게임', '판타지', '', '', ''],
-      ['냥코 대전쟁', '모바일', '캐주얼', 10, 'rpg', '캐주얼', '', '', ''],
-      ['헬로타운', '모바일', '캐주얼', 10, '시뮬레이션', '도시건설', '', '', 'Hello Town'],
-      ['고양이 마법학교', '모바일', '캐주얼', 10, '방치형', '마법', '', '', ''],
-      ['Knife Hit', '모바일', '캐주얼', 10, '플래시게임', '캐주얼', '', '', ''],
-      ['가십하버', '모바일', '캐주얼', 5, '소셜네트워크', '캐주얼', '', '', 'Gossip Harbor'],
-      ['MONOPOLY GO', '모바일', '캐주얼', 5, '보드게임', '캐주얼', '', '', ''],
-      ['이환', '모바일', '서브컬쳐', 60, '오픈월드', 'rpg', '', '최근', 'nte'],
-      ['오버워치', 'PC', 'FPS', 100, 'FPS', '경쟁', '', '', 'Overwatch'],
-      ['엑스컴 1', 'PC', '전략', 150, '턴제', '전술', '', '', 'XCOM 1'],
-      ['패스 오브 엑자일 2', 'PC', 'RPG', 50, '액션RPG', '던전크롤', '', '', 'Path of Exile 2'],
-      ['디아블로 3', 'PC', 'RPG', 100, '액션RPG', '던전크롤', '', '', 'Diablo III'],
-      ['명일방주', '모바일', '서브컬쳐', 100, '기타', '기타', '', '', ''],
-      ['귀무자 2', '콘솔', '액션', 50, '액션', '고난이도', '', '', 'Ghostrunner 2'],
-      ['베틀필드 시리즈', 'PC', 'FPS', 100, 'FPS', '멀티플레이', '', '', 'Battlefield Series'],
-      ['RATOPIA', 'PC', '전략', 75, '도시건설', '경제', '', '', 'RATOPIA'],
-      ['리스크 오브 레인 2', 'PC', '로그라이크', 10, '슈팅', '협동', '', '', 'RISK OF RAIN 2'],
-      ['아크 레이더스', 'PC', '약탈슈팅', 10, '슈팅', '협동', '', '', 'ARC Raiders'],
-      ['이스케이프 프롬 타르코프', 'PC', '약탈슈팅', 100, '슈팅', '협동', '', '', 'Escape from Tarkov'],
-      ['드레곤네스트', 'PC', 'MMORPG', 100, '액션', '협동', '', '', 'Dragonnest'],
-      ['딸깍 다이스', 'PC', '캐주얼', 3, '주사위', 'rpg', '', '최근', ''],
-    ];
-
     function getGenreIcon(genre) {
       return genreIcons[genre] || genreIcons['전략'];
     }
@@ -1325,26 +1189,104 @@
       return 'prism';
     }
 
+    const SHEET_ID = '10RgqaNk-8V5tBnG78rsHzRUmcI3cAM4EbGXB3k8bBLY';
+    const SHEET_NAME = '게임 목록';
+
     function init() {
-      loadGameData();
+      showLoading(true);
+      loadFromSheets();
     }
 
-    function loadGameData() {
-      gameData = fullGameData.map(data => ({
-        '게임 이름': data[0],
-        '기기': data[1],
-        '분류': data[2],
-        '시간': data[3],
-        '태그1': data[4],
-        '태그2': data[5],
-        '태그3': data[6],
-        '태그4': data[7],
-        '영어이름': data[8]
-      }));
+    function showLoading(show) {
+      const existing = document.getElementById('loadingOverlay');
+      if (show && !existing) {
+        const overlay = document.createElement('div');
+        overlay.id = 'loadingOverlay';
+        overlay.style.cssText = `
+          position: fixed; inset: 0; z-index: 9999;
+          background: rgba(10,8,16,0.92);
+          display: flex; flex-direction: column;
+          align-items: center; justify-content: center; gap: 1.5rem;
+        `;
+        overlay.innerHTML = `
+          <div style="font-size:2.5rem;">🎮</div>
+          <div style="color:#00d4ff; font-size:1.1rem; letter-spacing:2px;">데이터 불러오는 중...</div>
+          <div style="width:200px; height:3px; background:rgba(0,212,255,0.2); border-radius:2px; overflow:hidden;">
+            <div style="height:100%; background:#00d4ff; border-radius:2px; animation: loadBar 1.5s ease-in-out infinite;" id="loadBar"></div>
+          </div>
+          <style>
+            @keyframes loadBar {
+              0% { width: 0%; margin-left: 0; }
+              50% { width: 60%; margin-left: 20%; }
+              100% { width: 0%; margin-left: 100%; }
+            }
+          </style>
+        `;
+        document.body.appendChild(overlay);
+      } else if (!show && existing) {
+        existing.style.opacity = '0';
+        existing.style.transition = 'opacity 0.4s';
+        setTimeout(() => existing.remove(), 400);
+      }
+    }
+
+    function loadFromSheets() {
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+      const script = document.createElement('script');
+      window._sheetsCallback = function(response) {
+        try {
+          parseAndLoad(response);
+        } catch(e) {
+          console.error('파싱 오류:', e);
+          showError();
+        }
+        document.body.removeChild(script);
+        delete window._sheetsCallback;
+      };
+      const callbackUrl = url + '&tqx=out:json&callback=_sheetsCallback';
+      script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json;responseHandler:_sheetsCallback&sheet=${encodeURIComponent(SHEET_NAME)}`;
+      script.onerror = () => { showError(); };
+      document.body.appendChild(script);
+    }
+
+    function parseAndLoad(response) {
+      const rows = response.table.rows;
+      gameData = rows.map(row => {
+        const c = row.c;
+        const val = (i) => (c[i] && c[i].v !== null && c[i].v !== undefined) ? String(c[i].v).trim() : '';
+        const num = (i) => (c[i] && c[i].v !== null) ? Number(c[i].v) : 0;
+        // 컬럼: 게임이름(0), 기기(1), 분류(2), 시간(3), 태그1(4), 태그2(5), 영어이름(6), best(7), 최근(8)
+        return {
+          '게임 이름': val(0),
+          '기기': val(1),
+          '분류': val(2),
+          '시간': num(3),
+          '태그1': val(4),
+          '태그2': val(5),
+          '태그3': num(7) === 1 ? 'Best' : '',
+          '태그4': num(8) === 1 ? '최근' : '',
+          '영어이름': val(6)
+        };
+      }).filter(g => g['게임 이름']);
 
       calculateStats(gameData);
       render();
       animateTime();
+      showLoading(false);
+    }
+
+    function showError() {
+      showLoading(false);
+      const err = document.createElement('div');
+      err.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#ff6b6b;color:white;padding:1rem 1.5rem;border-radius:8px;z-index:9999;font-size:0.9rem;';
+      err.textContent = '⚠️ 데이터를 불러오지 못했어요. 잠시 후 새로고침 해주세요.';
+      document.body.appendChild(err);
+      setTimeout(() => err.remove(), 5000);
+    }
+
+    function loadGameData() {
+      // 레거시 호환용 (직접 호출 시)
+      loadFromSheets();
     }
 
     function calculateStats(data) {
