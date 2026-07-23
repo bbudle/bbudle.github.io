@@ -81,49 +81,29 @@
       letter-spacing: 1px;
       text-transform: uppercase;
       text-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
-      flex: 1;
       text-align: left;
     }
 
+    .game-header-brand {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      flex: 1;
+      gap: 0.8rem;
+    }
+
     .game-header-icon {
-      position: relative;
-      font-size: 1.5rem;
-      animation: float 3s ease-in-out infinite;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+      line-height: 1;
+      border: 1px solid rgba(0, 212, 255, 0.48);
+      border-radius: 10px;
+      background: linear-gradient(145deg, rgba(0, 212, 255, 0.18), rgba(153, 50, 204, 0.16));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 5px 14px rgba(20, 15, 66, 0.28);
       flex-shrink: 0;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
-    }
-
-    /* 헤더 네비게이션 버튼 스타일 */
-    .header-nav {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .header-btn {
-      width: 40px;
-      height: 40px;
-      border: 2px solid var(--color-primary);
-      background: rgba(0, 212, 255, 0.1);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.2rem;
-      transition: var(--transition);
-      color: var(--color-text);
-    }
-
-    .header-btn:hover {
-      background: rgba(0, 212, 255, 0.2);
-      box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
-      transform: scale(1.1);
     }
 
     /* 트로피 섹션 스타일 */
@@ -1216,6 +1196,67 @@
       -webkit-text-fill-color: var(--color-text);
       text-shadow: 0 3px 12px rgba(26, 20, 70, 0.65);
     }
+
+    .creation-note {
+      position: relative;
+      z-index: 1;
+      width: fit-content;
+      max-width: calc(100% - 3rem);
+      margin: -2rem auto 5rem;
+      padding: 0.7rem 1.25rem;
+      color: rgba(255, 255, 255, 0.84);
+      font-size: 0.8rem;
+      line-height: 1.6;
+      text-align: center;
+      letter-spacing: -0.01em;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      background: rgba(45, 35, 103, 0.72);
+      box-shadow: 0 10px 28px rgba(26, 20, 70, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .creation-note strong {
+      color: rgba(255, 255, 255, 0.98);
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .game-header {
+        height: 62px;
+        padding: 0 1rem;
+        gap: 0.6rem;
+      }
+
+      .game-header-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+        border-radius: 8px;
+      }
+
+      .game-header-brand {
+        gap: 0.55rem;
+      }
+
+      .game-header-title {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 1rem;
+        letter-spacing: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .creation-note {
+        width: auto;
+        max-width: calc(100% - 2rem);
+        margin: -1.25rem 1rem 4rem;
+        padding: 0.65rem 1rem;
+        font-size: 0.72rem;
+        border-radius: 14px;
+      }
+    }
   </style>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VLHHRWB8MH"></script>
@@ -1229,12 +1270,9 @@
 <body>
   <!-- 게임 UI 상단 바 -->
   <div class="game-header">
-    <div class="game-header-icon">🎮</div>
-    <h1 class="game-header-title">김재웅의 게임 플레이 아카이브</h1>
-    <div class="header-nav">
-      <button class="header-btn" title="음악"><span>🎵</span></button>
-      <button class="header-btn" title="설정"><span>⚙️</span></button>
-      <button class="header-btn" title="공유"><span>🔗</span></button>
+    <div class="game-header-brand">
+      <div class="game-header-icon" aria-hidden="true">🎮</div>
+      <h1 class="game-header-title">김재웅의 게임 플레이 아카이브</h1>
     </div>
   </div>
 
@@ -1310,6 +1348,10 @@
       </div>
     </div>
   </div>
+
+  <footer class="creation-note">
+    게임 기록과 화면 구성은 <strong>직접 기획</strong>했으며, 구현에는 <strong>생성형 AI를 활용</strong>했습니다.
+  </footer>
 
   <script>
     let gameData = [];
