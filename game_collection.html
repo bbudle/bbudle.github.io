@@ -1093,6 +1093,125 @@
       box-shadow: 0 0 8px rgba(0, 212, 255, 0.65);
     }
 
+    /* 메인 - 최근 관심 게임 */
+    .report-section {
+      margin: 4.5rem 0 5rem;
+      animation: fadeIn 1s ease;
+    }
+
+    .report-section .section-header {
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    .report-section-kicker {
+      margin-left: auto;
+      padding-bottom: 0.35rem;
+      color: rgba(215, 232, 255, 0.72);
+      font-family: var(--font-en);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+    }
+
+    .report-games-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .report-card {
+      cursor: pointer;
+      border-color: rgba(255, 20, 147, 0.72);
+      box-shadow: 0 12px 32px rgba(30, 24, 79, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 0 24px rgba(255, 20, 147, 0.12) !important;
+    }
+
+    .report-card:hover {
+      border-color: var(--color-primary);
+    }
+
+    .report-card:focus-visible {
+      outline: 3px solid var(--color-secondary);
+      outline-offset: 3px;
+    }
+
+    .report-card .game-card-right {
+      min-width: 280px;
+    }
+
+    .report-entry {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 132px;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid rgba(255, 20, 147, 0.58);
+      border-radius: 9px;
+      background: linear-gradient(135deg, rgba(255, 20, 147, 0.16), rgba(153, 50, 204, 0.16));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 0 16px rgba(255, 20, 147, 0.15);
+    }
+
+    .report-icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.10);
+      font-size: 1.05rem;
+    }
+
+    .report-entry-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .report-entry-label {
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 0.72rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .report-click {
+      color: #ff83c5;
+      font-family: var(--font-en);
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.13em;
+      animation: report-click-pulse 1.15s ease-in-out infinite;
+    }
+
+    @keyframes report-click-pulse {
+      0%, 100% { opacity: 0.58; transform: translateX(0); }
+      50% { opacity: 1; transform: translateX(3px); text-shadow: 0 0 10px rgba(255, 20, 147, 0.75); }
+    }
+
+    .report-link-notice {
+      position: fixed;
+      left: 50%;
+      bottom: 2rem;
+      z-index: 9999;
+      transform: translateX(-50%) translateY(12px);
+      padding: 0.8rem 1.15rem;
+      border: 1px solid rgba(0, 212, 255, 0.48);
+      border-radius: 9px;
+      background: rgba(45, 35, 103, 0.94);
+      color: #fff;
+      font-size: 0.84rem;
+      box-shadow: 0 12px 28px rgba(20, 15, 66, 0.35);
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+    }
+
+    .report-link-notice.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     @media (max-width: 1200px) {
       .genre-grid {
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -1150,6 +1269,22 @@
         margin-left: 0;
         margin-top: 1rem;
         gap: 1rem;
+      }
+
+      .report-section {
+        margin: 3.5rem 0 4rem;
+      }
+
+      .report-section-kicker {
+        display: none;
+      }
+
+      .report-card .game-card-right {
+        min-width: 0;
+      }
+
+      .report-entry {
+        margin-left: auto;
       }
 
       .genre-stats-section {
@@ -1293,6 +1428,14 @@
         <div class="bar-container" id="timeBar"></div>
         <div class="bar-legend" id="barLegend"></div>
       </div>
+
+      <section class="report-section" id="reportSection" style="display: none;">
+        <div class="section-header">
+          <h2 class="section-title">최근 관심 게임</h2>
+          <div class="report-section-kicker">RECENTLY PLAYED</div>
+        </div>
+        <div class="report-games-list" id="reportGamesList"></div>
+      </section>
 
       <div>
         <div class="section-header">
@@ -1451,11 +1594,21 @@
 
     function parseAndLoad(response) {
       const rows = response.table.rows;
+      const columns = response.table.cols || [];
+      const columnLabels = columns.map(column => String(column.label || '').replace(/\s+/g, ''));
+      const reportFlagIndex = columnLabels.findIndex(label =>
+        (label.includes('리포트') || label.includes('리포터')) && label.includes('여부')
+      );
+      const reportLinkIndex = columnLabels.findIndex(label =>
+        label === '리포트링크' ||
+        ((label.includes('리포트') || label.includes('분석') || label.includes('노션')) &&
+        (label.includes('링크') || label.includes('URL')))
+      );
       gameData = rows.map(row => {
         const c = row.c;
         const val = (i) => (c[i] && c[i].v !== null && c[i].v !== undefined) ? String(c[i].v).trim() : '';
         const num = (i) => (c[i] && c[i].v !== null) ? Number(c[i].v) : 0;
-        // 컬럼: 게임이름(0), 기기(1), 분류(2), 시간(3), 태그1(4), 태그2(5), 영어이름(6), best(7), 최근(8), 디테일1(9), 디테일2(10), 디테일3(11)
+        // 기본 컬럼 + '리포트 여부', '리포트 링크' 컬럼은 이름으로 자동 인식.
         return {
           '게임 이름': val(0),
           '기기': val(1),
@@ -1468,7 +1621,9 @@
           '영어이름': val(6),
           '디테일1': val(9),
           '디테일2': val(10),
-          '디테일3': val(11)
+          '디테일3': val(11),
+          '리포트 여부': num(reportFlagIndex >= 0 ? reportFlagIndex : 12),
+          '리포트 링크': reportLinkIndex >= 0 ? val(reportLinkIndex) : ''
         };
       }).filter(g => g['게임 이름']);
 
@@ -1537,8 +1692,100 @@
 
     function render() {
       renderBar();
+      renderReports();
       renderTrophies();
       renderGenreGrid();
+    }
+
+    function renderReports() {
+      const reportSection = document.getElementById('reportSection');
+      const reportGamesList = document.getElementById('reportGamesList');
+      const reportGames = gameData.filter(game => Number(game['리포트 여부']) === 1);
+
+      reportGamesList.innerHTML = '';
+      if (reportGames.length === 0) {
+        reportSection.style.display = 'none';
+        return;
+      }
+
+      const maxHours = Math.max(...reportGames.map(game => Number(game['시간']) || 0), 1);
+
+      reportGames
+        .sort((a, b) => (Number(b['시간']) || 0) - (Number(a['시간']) || 0))
+        .forEach(game => {
+          const card = document.createElement('div');
+          card.className = 'game-card report-card';
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+          card.setAttribute('aria-label', `${game['게임 이름']} 리포트 열기`);
+
+          const hours = Number(game['시간']) || 0;
+          const progressPercent = (hours / maxHours) * 100;
+          const tags = [game['기기'], game['태그1'], game['태그2']].filter(Boolean);
+          const tagsHTML = tags.map(tag => `<span class="game-tag">${escapeHTML(tag)}</span>`).join('');
+
+          card.innerHTML = `
+            <div class="game-card-left">
+              <div class="game-card-title-row">
+                <div class="game-card-title">${escapeHTML(game['게임 이름'])}</div>
+                <div class="game-card-tags">${tagsHTML}</div>
+              </div>
+              <div class="game-english-name">${escapeHTML(game['영어이름'] || '')}</div>
+            </div>
+            <div class="game-card-right">
+              <div class="game-hours-display">
+                <div class="game-hours-big">${hours}</div>
+                <div class="game-hours-label">시간</div>
+              </div>
+              <div class="game-progress-bar" aria-hidden="true">
+                <div class="game-progress-fill" style="width: ${progressPercent}%"></div>
+              </div>
+              <div class="report-entry" aria-hidden="true">
+                <span class="report-icon">📊</span>
+                <span class="report-entry-copy">
+                  <span class="report-entry-label">리포트</span>
+                  <span class="report-click">CLICK!</span>
+                </span>
+              </div>
+            </div>
+          `;
+
+          const openReport = () => {
+            const reportLink = String(game['리포트 링크'] || '').trim();
+            if (reportLink) {
+              // 시트의 '리포트 링크'에 입력된 주소를 새 탭에서 연다.
+              window.open(reportLink, '_blank', 'noopener,noreferrer');
+            } else {
+              showReportLinkNotice();
+            }
+          };
+
+          card.addEventListener('click', openReport);
+          card.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openReport();
+            }
+          });
+          reportGamesList.appendChild(card);
+        });
+
+      reportSection.style.display = 'block';
+    }
+
+    function showReportLinkNotice() {
+      let notice = document.getElementById('reportLinkNotice');
+      if (!notice) {
+        notice = document.createElement('div');
+        notice.id = 'reportLinkNotice';
+        notice.className = 'report-link-notice';
+        notice.textContent = '리포트 링크 연결 예정';
+        document.body.appendChild(notice);
+      }
+
+      notice.classList.add('visible');
+      clearTimeout(notice._hideTimer);
+      notice._hideTimer = setTimeout(() => notice.classList.remove('visible'), 1500);
     }
 
     function renderBar() {
